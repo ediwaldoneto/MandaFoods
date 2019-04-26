@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "725167408160",
+    "firebase_url": "https://manda-foods.firebaseio.com",
+    "project_id": "manda-foods",
+    "storage_bucket": "manda-foods.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725167408160:android:093114042328e85d",
+        "android_client_info": {
+          "package_name": "com.br.nt.mandafoods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725167408160-ugmnta1h06bdpubi5qkt0e9i2fr86abe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.br.nt.mandafoods",
+            "certificate_hash": "e9e5a41ea006c8a4b175b41b973a757c52ee8052"
+          }
+        },
+        {
+          "client_id": "725167408160-u1fj4mfurtg3t5bshus2u7u013cuav8u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIPbl-iF6zUTCK4E8xSQBOR8H2MWyg1ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725167408160-u1fj4mfurtg3t5bshus2u7u013cuav8u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
