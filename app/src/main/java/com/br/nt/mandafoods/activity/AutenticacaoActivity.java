@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -28,8 +30,9 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     private Button botaoAcessar;
     private EditText campoEmail, campoSenha;
-    private Switch tipoAcesso;
+    private Switch tipoAcesso, tipoUsuario;
     private FirebaseAuth autenticacao;
+    private LinearLayout linearLayoutTipoUsuario;
 
 
     @Override
@@ -41,7 +44,20 @@ public class AutenticacaoActivity extends AppCompatActivity {
         inicializaComponentes();
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         verificaLogado();
+
+        //Deslogar Usuario autenticado
         //autenticacao.signOut();
+
+        tipoAcesso.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){//Empresa
+                    linearLayoutTipoUsuario.setVisibility(View.VISIBLE);
+                }else {//Usuario
+                    linearLayoutTipoUsuario.setVisibility(View.GONE);
+                }
+            }
+        });
 
         //EVENTO DO MEU BOTAO
         botaoAcessar.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +103,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
 
-                                        Toast.makeText(getApplicationContext(), "ERRO " + erroExcecao , Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "ERRO " + erroExcecao , Toast.LENGTH_LONG).show();
 
                                     }
                                 }
@@ -133,9 +149,12 @@ public class AutenticacaoActivity extends AppCompatActivity {
         campoSenha = findViewById(R.id.editCadastroSenha);
         botaoAcessar = findViewById(R.id.buttonAcesso);
         tipoAcesso = findViewById(R.id.switchAcesso);
+        tipoUsuario = findViewById(R.id.switchTipoAutentica);
+        linearLayoutTipoUsuario = findViewById(R.id.linearTipoUsuario);
 
     }
 
+    //VERIFICANDO USUARIO LOGADO
     private void verificaLogado(){
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
         if (usuarioAtual != null){
