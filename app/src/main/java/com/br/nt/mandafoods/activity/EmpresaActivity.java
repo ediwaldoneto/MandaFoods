@@ -1,25 +1,15 @@
 package com.br.nt.mandafoods.activity;
 
-
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-
 import com.br.nt.mandafoods.R;
 
-public class HomeActivity extends AppCompatActivity {
-
-
+public class EmpresaActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_empresa);
     }
-
-
-
 }
-
-
-

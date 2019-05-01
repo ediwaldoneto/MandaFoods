@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.br.nt.mandafoods.R;
 import com.br.nt.mandafoods.helper.ConfiguracaoFirebase;
+import com.br.nt.mandafoods.helper.UsuarioFirebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -76,14 +77,19 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
                         //Verificando o estado do switch
 
-                        if(tipoAcesso.isChecked()){
+                        if(tipoAcesso.isChecked()){//Cadastro
                             autenticacao.createUserWithEmailAndPassword(email,senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()){
 
                                         Toast.makeText(getApplicationContext(), "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+
+                                        String tipoUsuario = getTipoUsuario();
+                                        UsuarioFirebase.atualizarTipoUsuario(tipoUsuario);
+
+                                        //Direcionando para minha home
+                                        abrirTelaPrincipal(tipoUsuario);
 
 
                                     }else{
@@ -118,7 +124,10 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                    if (task.isSuccessful()){
                                        Toast.makeText(getApplicationContext(), "Logado com sucesso !", Toast.LENGTH_SHORT).show();
-                                       startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                       //
+                                       String tipoUsuario = task.getResult().getUser().getDisplayName();
+                                       abrirTelaPrincipal(tipoUsuario);
+
                                    }else {
                                        Toast.makeText(getApplicationContext(), "Erro ao fazer login " + task.getException() , Toast.LENGTH_SHORT).show();
                                    }
@@ -142,7 +151,29 @@ public class AutenticacaoActivity extends AppCompatActivity {
 
     }
 
+
+    // METEDO PARA DIRECIONAMENTO DE TELA
+    private void abrirTelaPrincipal(String tipoUsuario){
+        if (tipoUsuario.equals("E")) {//EMPRESA
+            startActivity(new Intent(getApplicationContext(), EmpresaActivity.class));
+        }else {//USUARIO
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+        }
+
+    }
+
+
+
+
+    //Retornando meu tipo usuario
+
+    private String getTipoUsuario(){
+        return tipoUsuario.isChecked() ? "E" : "U";
+    }
+
+
     //INICIALIZACAO DOS MEUS COMPONENTES
+
     private void inicializaComponentes(){
 
         campoEmail = findViewById(R.id.editCadastroEmail);
@@ -155,10 +186,12 @@ public class AutenticacaoActivity extends AppCompatActivity {
     }
 
     //VERIFICANDO USUARIO LOGADO
+
     private void verificaLogado(){
         FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
         if (usuarioAtual != null){
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            String tipoUsuario = usuarioAtual.getDisplayName();
+            abrirTelaPrincipal(tipoUsuario);
         }
     }
 }
