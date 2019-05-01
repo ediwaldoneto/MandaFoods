@@ -88,13 +88,13 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                         String tipoUsuario = getTipoUsuario();
                                         UsuarioFirebase.atualizarTipoUsuario(tipoUsuario);
 
-                                        //Direcionando para minha home
+                                        //REDIRECIONANDO  PARA A TELA DO USUARIO LOGADO
                                         abrirTelaPrincipal(tipoUsuario);
 
 
                                     }else{
 
-                                        String erroExcecao = "";
+                                        String erroExcecao;
 
                                         try {
                                             throw task.getException();
