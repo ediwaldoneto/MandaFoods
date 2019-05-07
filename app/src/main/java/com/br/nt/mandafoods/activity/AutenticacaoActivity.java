@@ -40,7 +40,7 @@ public class AutenticacaoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_autenticacao);
-        getSupportActionBar().hide();
+
 
         inicializaComponentes();
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
@@ -88,13 +88,13 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                         String tipoUsuario = getTipoUsuario();
                                         UsuarioFirebase.atualizarTipoUsuario(tipoUsuario);
 
-                                        //REDIRECIONANDO  PARA A TELA DO USUARIO LOGADO
+                                        //Direcionando para minha home
                                         abrirTelaPrincipal(tipoUsuario);
 
 
                                     }else{
 
-                                        String erroExcecao;
+                                        String erroExcecao = "";
 
                                         try {
                                             throw task.getException();
@@ -125,7 +125,9 @@ public class AutenticacaoActivity extends AppCompatActivity {
                                    if (task.isSuccessful()){
                                        Toast.makeText(getApplicationContext(), "Logado com sucesso !", Toast.LENGTH_SHORT).show();
                                        //
-                                       String tipoUsuario = task.getResult().getUser().getDisplayName();
+                                       @NonNull
+                                       String tipoUsuario;
+                                       tipoUsuario = task.getResult().getUser().getDisplayName();
                                        abrirTelaPrincipal(tipoUsuario);
 
                                    }else {
