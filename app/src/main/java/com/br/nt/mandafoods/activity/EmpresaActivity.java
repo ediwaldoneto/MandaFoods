@@ -26,7 +26,7 @@ public class EmpresaActivity extends AppCompatActivity {
         //Config ToolBar
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Manda Food - Empresa");
+        toolbar.setTitle("Manda Foods - Empresa");
         setSupportActionBar(toolbar);
 
 
@@ -64,6 +64,7 @@ public class EmpresaActivity extends AppCompatActivity {
 
         try {
             autenticacao.signOut();
+            finish();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -72,7 +73,7 @@ public class EmpresaActivity extends AppCompatActivity {
     }
 
     private void abrirConfigs(){
-        startActivity(new Intent(EmpresaActivity.this, EmpresaActivity.class));
+        startActivity(new Intent(EmpresaActivity.this, ConfiguracoesEmpresaActivity.class));
     }
 
     private void abrirNovoProduto(){
