@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void abrirConfigs(){
-        startActivity(new Intent(HomeActivity.this, ConfiguracoesEmpresaActivity.class));
+        startActivity(new Intent(HomeActivity.this, ConfiguracoesUsuarioActivity.class));
     }
 
     private void iniciarlizaComponentes(){
