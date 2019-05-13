@@ -21,8 +21,13 @@ import com.br.nt.mandafoods.model.Empresa;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 
 import java.io.ByteArrayOutputStream;
@@ -36,6 +41,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
     private static final int SELECAO_GALERIA = 200;
 
     private StorageReference storageReference;
+    private DatabaseReference firebaseRef;
 
     private String usuarioLogado;
     private String urlImagemSelecionada = "";
@@ -49,6 +55,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
         inicializaComponentes();
         storageReference = ConfiguracaoFirebase.getFirebaseStorage();
         usuarioLogado = UsuarioFirebase.getIdUsuario();
+        firebaseRef = ConfiguracaoFirebase.getFirebase();
 
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,7 +75,37 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
             }
         });
 
+        //Recuperando os dados da empresa cadastrada
+        recuperarDadosEmpresa();
 
+
+    }
+
+    private void recuperarDadosEmpresa(){
+        DatabaseReference empresaRef = firebaseRef.child("empresas").child(usuarioLogado);
+        empresaRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.getValue() != null){
+                    Empresa empresa = dataSnapshot.getValue(Empresa.class);
+                    editEmpresaNome.setText(empresa.getNome());
+                    editEmpresaCategoria.setText(empresa.getCategoria());
+                    editEmpresaTempo.setText(empresa.getTempo());
+                    editEmpresataxa.setText(empresa.getPrecoEntrega().toString());
+                    urlImagemSelecionada = empresa.getUrlImagem();
+
+                    if (urlImagemSelecionada != null){
+                        Picasso.get().load(urlImagemSelecionada).into(imagePerfilEmpresa);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void validarDadosEmpresa(View view){
