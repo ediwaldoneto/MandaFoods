@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.br.nt.mandafoods.R;
 import com.br.nt.mandafoods.helper.ConfiguracaoFirebase;
 import com.br.nt.mandafoods.helper.UsuarioFirebase;
+import com.br.nt.mandafoods.model.Empresa;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -68,6 +69,48 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void validarDadosEmpresa(View view){
+
+        String nome = editEmpresaNome.getText().toString();
+        String taxa = editEmpresataxa.getText().toString();
+        String categoria = editEmpresaCategoria.getText().toString();
+        String tempo = editEmpresaTempo.getText().toString();
+
+        if( !nome.isEmpty()){
+            if( !taxa.isEmpty()){
+                if( !categoria.isEmpty()){
+                    if( !tempo.isEmpty()){
+
+                        Empresa empresa = new Empresa();
+                        empresa.setIdUsuario( usuarioLogado );
+                        empresa.setNome( nome );
+                        empresa.setPrecoEntrega( Double.parseDouble(taxa) );
+                        empresa.setCategoria(categoria);
+                        empresa.setTempo( tempo );
+                        empresa.setUrlImagem( urlImagemSelecionada );
+                        empresa.salvar();
+                        finish();
+
+                    }else{
+                        exibirMensagem("Digite um tempo de entrega");
+                    }
+                }else{
+                    exibirMensagem("Digite uma categoria");
+                }
+            }else{
+                exibirMensagem("Digite uma taxa de entrega");
+            }
+        }else{
+            exibirMensagem("Digite um nome para a empresa");
+        }
+
+    }
+
+    private void exibirMensagem(String texto){
+        Toast.makeText(this, texto, Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override
