@@ -95,7 +95,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
                     editEmpresataxa.setText(empresa.getPrecoEntrega().toString());
                     urlImagemSelecionada = empresa.getUrlImagem();
 
-                    if (urlImagemSelecionada != null){
+                    if (urlImagemSelecionada != ""){
                         Picasso.get().load(urlImagemSelecionada).into(imagePerfilEmpresa);
                     }
                 }
