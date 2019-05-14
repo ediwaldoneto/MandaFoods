@@ -18,6 +18,8 @@ import com.br.nt.mandafoods.R;
 import com.br.nt.mandafoods.helper.ConfiguracaoFirebase;
 import com.br.nt.mandafoods.helper.UsuarioFirebase;
 import com.br.nt.mandafoods.model.Empresa;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +84,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
     }
 
     private void recuperarDadosEmpresa(){
+
         DatabaseReference empresaRef = firebaseRef.child("empresas").child(usuarioLogado);
         empresaRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,6 +96,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
                     editEmpresaCategoria.setText(empresa.getCategoria());
                     editEmpresaTempo.setText(empresa.getTempo());
                     editEmpresataxa.setText(empresa.getPrecoEntrega().toString());
+
                     urlImagemSelecionada = empresa.getUrlImagem();
 
                     if (urlImagemSelecionada != ""){
@@ -176,7 +180,28 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
                     final StorageReference imgRef = storageReference.child("imagens").child("empresas").child(usuarioLogado + "jpeg");
 
                     UploadTask uploadTask = imgRef.putBytes(dadosImagem);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                    uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()){
+                                throw task.getException();
+                            }
+                            return imgRef.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUrl = task.getResult();
+                                urlImagemSelecionada = downloadUrl.toString();
+                                Toast.makeText(ConfiguracoesEmpresaActivity.this, "Sucesso ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(ConfiguracoesEmpresaActivity.this, "Erro ao fazer upload da imagem", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    /*uploadTask.addOnFailureListener(new OnFailureListener() {
 
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -195,7 +220,7 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                         }
-                    });
+                    });*/
 
                 }
 
