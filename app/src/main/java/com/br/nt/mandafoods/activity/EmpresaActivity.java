@@ -1,19 +1,26 @@
 package com.br.nt.mandafoods.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.br.nt.mandafoods.R;
 import com.br.nt.mandafoods.adapter.AdapterProduto;
 import com.br.nt.mandafoods.helper.ConfiguracaoFirebase;
 import com.br.nt.mandafoods.helper.UsuarioFirebase;
+import com.br.nt.mandafoods.model.Empresa;
 import com.br.nt.mandafoods.model.Produto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +39,7 @@ public class EmpresaActivity extends AppCompatActivity {
     private List<Produto> produtos = new ArrayList<>();
     private DatabaseReference firebaseRef;
     private String idUsuarioLogado;
+    private Produto produto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,7 @@ public class EmpresaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_empresa);
 
         inicializarComponentes();
+        swipe();
 
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
         firebaseRef = ConfiguracaoFirebase.getFirebase();
@@ -62,6 +71,59 @@ public class EmpresaActivity extends AppCompatActivity {
 
     }
 
+
+    private void swipe(){
+
+        ItemTouchHelper.Callback itemTouch = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int dragFlags = ItemTouchHelper.ACTION_STATE_IDLE;
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(dragFlags,swipeFlags );
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                excluirMovimentacao(viewHolder);
+            }
+        };
+
+        new ItemTouchHelper(itemTouch).attachToRecyclerView(recyclerProdutos);
+    }
+
+    private void excluirMovimentacao(final RecyclerView.ViewHolder viewHolder){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Excluir Item do Menu");
+        alert.setMessage("Você tem certeza que deseja excluir esse item do menu?");
+        alert.setCancelable(false);
+        alert.setPositiveButton("Comfirmar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               int position = viewHolder.getAdapterPosition();
+               produto = produtos.get(position);
+               produto.remover();
+               Toast.makeText(EmpresaActivity.this,"Produto exlcuido com sucesso", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(EmpresaActivity.this,"Cancelado", Toast.LENGTH_SHORT).show();
+                adapterProduto.notifyDataSetChanged();
+            }
+        });
+
+        AlertDialog a = alert.create();
+        alert.show();
+    }
+
     private void recuperarProdutos(){
 
         DatabaseReference produtosRef = firebaseRef
@@ -75,6 +137,7 @@ public class EmpresaActivity extends AppCompatActivity {
 
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
                     produtos.add( ds.getValue(Produto.class) );
+
                 }
 
                 adapterProduto.notifyDataSetChanged();
