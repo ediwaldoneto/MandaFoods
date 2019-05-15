@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 
 import com.br.nt.mandafoods.R;
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.br.nt.mandafoods.listener.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +75,33 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+        recyclerEmpresa.addOnItemTouchListener(new RecyclerItemClickListener(
+                this,recyclerEmpresa,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        Empresa empresaSelecionada = empresas.get(position);
+                        Intent i = new Intent(HomeActivity.this, CardapioActivity.class);
+                        i.putExtra("empresa", empresaSelecionada);
+                        startActivity(i);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+                }
+                )
+        );
+
 
     }
 
@@ -148,6 +178,8 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 

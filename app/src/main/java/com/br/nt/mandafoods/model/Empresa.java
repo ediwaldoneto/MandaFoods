@@ -3,7 +3,9 @@ package com.br.nt.mandafoods.model;
 import com.br.nt.mandafoods.helper.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 
-public class Empresa {
+import java.io.Serializable;
+
+public class Empresa implements Serializable {
 
     private String idUsuario;
     private String urlImagem;
@@ -12,7 +14,7 @@ public class Empresa {
     private String categoria;
     private Double precoEntrega;
 
-    public Empresa() {
+    public Empresa()  {
     }
 
     public String getIdUsuario() {
