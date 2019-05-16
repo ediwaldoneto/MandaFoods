@@ -105,7 +105,7 @@ public class EmpresaActivity extends AppCompatActivity {
                int position = viewHolder.getAdapterPosition();
                produto = produtos.get(position);
                produto.remover();
-               Toast.makeText(EmpresaActivity.this,"Produto exlcuido com sucesso", Toast.LENGTH_SHORT).show();
+               Toast.makeText(EmpresaActivity.this,"Produto exlcuido com sucesso!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -113,7 +113,7 @@ public class EmpresaActivity extends AppCompatActivity {
         alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(EmpresaActivity.this,"Cancelado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EmpresaActivity.this,"Cancelado!", Toast.LENGTH_SHORT).show();
                 adapterProduto.notifyDataSetChanged();
             }
         });

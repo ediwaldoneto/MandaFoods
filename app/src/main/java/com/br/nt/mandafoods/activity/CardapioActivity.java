@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CardapioActivity extends AppCompatActivity {
+
     private RecyclerView recyclerProdutosCardapio;
     private ImageView imageEmpresaCardapio;
     private TextView textNomeEmpresaCardapio;
