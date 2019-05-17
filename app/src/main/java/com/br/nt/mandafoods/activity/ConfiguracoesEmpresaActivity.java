@@ -85,6 +85,8 @@ public class ConfiguracoesEmpresaActivity extends AppCompatActivity {
 
     private void recuperarDadosEmpresa(){
 
+
+
         DatabaseReference empresaRef = firebaseRef.child("empresas").child(usuarioLogado);
         empresaRef.addValueEventListener(new ValueEventListener() {
             @Override
