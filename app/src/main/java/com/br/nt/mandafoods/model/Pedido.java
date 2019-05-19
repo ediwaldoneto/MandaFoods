@@ -126,4 +126,21 @@ public class Pedido {
         public void setObservacao(String observacao) {
             this.observacao = observacao;
         }
+
+    public void confirmar() {
+            DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
+            DatabaseReference pedidoRef = firebaseRef.child("pedidos").child(getIdEmpresa()).child(getIdPedido());
+            pedidoRef.setValue(this);
+    }
+
+    public void remover(){
+
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebase();
+        DatabaseReference pedidoRef = firebaseRef
+                .child("pedidos_usuario")
+                .child( getIdEmpresa() )
+                .child( getIdUsuario() );
+        pedidoRef.removeValue();
+
+    }
 }

@@ -45,5 +45,7 @@ dependencies {
 
     implementation 'com.github.d-max:spots-dialog:1.1@aar'
 
+    implementation 'com.github.BlacKCaT27:CurrencyEditText:2.0.2'
+
 }
 apply plugin: 'com.google.gms.google-services'

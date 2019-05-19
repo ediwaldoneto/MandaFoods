@@ -56,6 +56,7 @@ public class CardapioActivity extends AppCompatActivity {
     private int qtdItensCarrinho;
     private Double totalCarrinho;
     private TextView textCarrinhoQtd, textCarrinhoTotal;
+    private int metodoPagamento;
 
 
     @Override
@@ -296,11 +297,58 @@ public class CardapioActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.menuPedido :
+                confirmarPedido();
 
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void confirmarPedido() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Selecione seu método de pagamento");
+
+        CharSequence[] itens = new CharSequence[]{
+                "Dinheiro","Máquina Cartão"
+        };
+
+        builder.setSingleChoiceItems(itens, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                metodoPagamento = which;
+            }
+        });
+            final EditText editText = new EditText(this);
+            editText.setHint("Digite aqui sua observação");
+            builder.setView(editText);
+
+            builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    String observacao = editText.getText().toString();
+                    pedidoRecuperado.setMetodoPagamento(metodoPagamento);
+                    pedidoRecuperado.setObservacao(observacao);
+                    pedidoRecuperado.setStatus("confirmado");
+                    pedidoRecuperado.confirmar();
+                    pedidoRecuperado.remover();
+                    pedidoRecuperado = null;
+                }
+            });
+
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
     }
 
     private void inicializarComponentes(){
